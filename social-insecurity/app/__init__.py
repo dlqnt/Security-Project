@@ -70,13 +70,13 @@ def get_user_by_username(username):
             (id,username) = row
             return {
                 "username": username,
-                "userid": id
+                "id": id
             }
         else:
             #user does not exist
             return {
                 "username": username,
-                "userid": None
+                "id": None
             }
     except sqlite3.Error as err:
         print("Error: {}".format(err))
