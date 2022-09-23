@@ -6,12 +6,13 @@ import sqlite3
 import os
 from flask_wtf.csrf import CSRFProtect
 
-csrf = CSRFProtect(app)
+
 
 # create and configure app
 app = Flask(__name__)
 Bootstrap(app)
 app.config.from_object(Config)
+csrf = CSRFProtect(app)
 
 # TODO: Handle login management better, maybe with flask_login?
 #login = LoginManager(app)
