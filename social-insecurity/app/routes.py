@@ -11,7 +11,7 @@ csrf = CSRFProtect(app)
 # home page/login/registration
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
-def index():
+""" def index():
     form = IndexForm()
     
 
@@ -28,7 +28,7 @@ def index():
         query_db('INSERT INTO Users (username, first_name, last_name, password) VALUES("{}", "{}", "{}", "{}");'.format(form.register.username.data, form.register.first_name.data,
          form.register.last_name.data, form.register.password.data))
         return redirect(url_for('index'))
-    return render_template('index.html', title='Welcome', form=form)
+    return render_template('index.html', title='Welcome', form=form) """
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
