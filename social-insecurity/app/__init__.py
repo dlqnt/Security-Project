@@ -4,6 +4,9 @@ from flask_bootstrap import Bootstrap
 #from flask_login import LoginManager
 import sqlite3
 import os
+from flask_wtf.csrf import CSRFProtect
+
+csrf = CSRFProtect(app)
 
 # create and configure app
 app = Flask(__name__)

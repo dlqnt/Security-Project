@@ -1,9 +1,11 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app, query_db
-from app.forms import IndexForm, PostForm, FriendsForm, ProfileForm, CommentsForm
+from app.forms import IndexForm, PostForm, FriendsForm, ProfileForm, CommentsForm, RegistrationForm 
 from datetime import datetime
 import os
+from flask_wtf.csrf import CSRFProtect
 
+csrf = CSRFProtect(app)
 # this file contains all the different routes, and the logic for communicating with the database
 
 # home page/login/registration
@@ -27,6 +29,16 @@ def index():
         return redirect(url_for('index'))
     return render_template('index.html', title='Welcome', form=form)
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user = User(form.username.data, form.email.data,
+                    form.password.data)
+        db_session.add(user)
+        flash('Thanks for registering')
+        return redirect(url_for('login'))
+    return render_template('index.html', title='Welcome', form=form)
 
 # content stream page
 @app.route('/stream/<username>', methods=['GET', 'POST'])

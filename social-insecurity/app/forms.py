@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FormField, TextAreaField, FileField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FormField, TextAreaField, FileField, validators
 from wtforms.fields.html5 import DateField
 
 # defines all forms in the application, these will be instantiated by the template,
@@ -13,17 +13,21 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember me') # TODO: It would be nice to have this feature implemented, probably by using cookies
     submit = SubmitField('Sign In')
 
-class RegisterForm(FlaskForm):
-    first_name = StringField('First Name', render_kw={'placeholder': 'First Name'})
-    last_name = StringField('Last Name', render_kw={'placeholder': 'Last Name'})
-    username = StringField('Username', render_kw={'placeholder': 'Username'})
-    password = PasswordField('Password', render_kw={'placeholder': 'Password'})
-    confirm_password = PasswordField('Confirm Password', render_kw={'placeholder': 'Confirm Password'})
-    submit = SubmitField('Sign Up')
+class RegistrationForm(FlaskForm):
+    first_name = StringField('First Name',[validators.Length(min=6, max=35)], render_kw={'placeholder': 'First Name'})
+    last_name = StringField('Last Name', [validators.Length(min=6, max=35)], render_kw={'placeholder': 'Last Name'})
+    username = StringField('Username', [validators.Length(min=4, max=25)])
+    email = StringField('Email Address', [validators.Length(min=6, max=35)])
+    password = PasswordField('New Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Repeat Password')
+    accept_tos = BooleanField('I accept the TOS', [validators.DataRequired()])
 
 class IndexForm(FlaskForm):
     login = FormField(LoginForm)
-    register = FormField(RegisterForm)
+    register = FormField(RegistrationForm)
 
 class PostForm(FlaskForm):
     content = TextAreaField('New Post', render_kw={'placeholder': 'What are you thinking about?'})
