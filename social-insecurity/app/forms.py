@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, FormField, TextAreaField, FileField, validators
 from wtforms.fields.html5 import DateField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 # defines all forms in the application, these will be instantiated by the template,
 # and the routes.py will read the values of the fields
@@ -31,7 +32,7 @@ class IndexForm(FlaskForm):
 
 class PostForm(FlaskForm):
     content = TextAreaField('New Post', render_kw={'placeholder': 'What are you thinking about?'})
-    image = FileField('Image')
+    image = FileField('Image', validators=[FileRequired(), FileAllowed(['png', 'jpg', 'jpeg'], 'Invalid File Type. Must be  .png, .jpeg, .jpg')])
     submit = SubmitField('Post')
 
 class CommentsForm(FlaskForm):
