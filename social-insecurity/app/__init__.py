@@ -1,6 +1,7 @@
 from flask import Flask, g
 from config import Config
 from flask_bootstrap import Bootstrap
+from werkzeug.security import check_password_hash 
 #from flask_login import LoginManager
 import sqlite3
 import os
@@ -42,7 +43,69 @@ def query_db(query, one=False):
     db.commit()
     return (rv[0] if rv else None) if one else rv
 
+
+def get_user_by_username(username):
+    """Get user details by name."""
+    conn = get_db()
+    cur = conn.cursor()
+    try:
+        sql = ("SELECT id, username FROM users WHERE username = ?")
+        cur.execute(sql, (username,))
+        for row in cur:
+            (id,name) = row
+            return {
+                "username": name,
+                "userid": id
+            }
+        else:
+            #user does not exist
+            return {
+                "username": username,
+                "userid": None
+            }
+    except sqlite3.Error as err:
+        print("Error: {}".format(err))
+    finally:
+        cur.close()
+    
+
+
+def get_hash_for_login(username):
+    """Get user details from id."""
+    db = sqlite3.connect(app.config['DATABASE'])
+    conn = db
+    cur = conn.cursor()
+    try:
+        sql = ("SELECT passwordhash FROM Users WHERE username=?")
+        cur.execute(sql, (username,))
+        for row in cur:
+            (passhash,) = row
+            return passhash
+        else:
+            return None
+    except sqlite3.Error as err:
+        print("Error: {}".format(err))
+    finally:
+        cur.close()
+        db.close()
+
+def valid_login(username, password):
+    """Checks if username-password combination is valid."""
+    # user password data typically would be stored in a database
+    db = sqlite3.connect(app.config['DATABASE'])
+    
+    conn = db
+
+    hash = get_hash_for_login(conn, username)
+    # the generate a password hash use the line below:
+    # generate_password_hash("rawPassword")
+    db.close()
+
+    if hash != None:
+        return check_password_hash(hash, password)
+    return False
 # TODO: Add more specific queries to simplify code
+
 
 # automatically called when application is closed, and closes db connection
 @app.teardown_appcontext
