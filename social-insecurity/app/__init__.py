@@ -43,12 +43,12 @@ def query_db(query, one=False):
     db.commit()
     return (rv[0] if rv else None) if one else rv
 
-def add_user(username, hash):
+def add_user(username, first_name, last_name, password, hash):
     conn = get_db()
     cur = conn.cursor()
     try:
-        sql = ('INSERT INTO Users (username, first_name, last_name, password) VALUES(?, ?, ?, ?)')
-        cur.execute(sql, (username, hash))
+        sql = ('INSERT INTO Users (username, first_name, last_name, password, passwordhash) VALUES(?, ?, ?, ?)')
+        cur.execute(sql, (username, first_name, last_name, password, hash))
         conn.commit()
     except sqlite3.Error as err:
         print("Error: {}".format(err))
@@ -118,7 +118,7 @@ def valid_login(username, password):
 
     if hash != None:
         return check_password_hash(hash, password)
-    return False
+    return None
 # TODO: Add more specific queries to simplify code
 
 

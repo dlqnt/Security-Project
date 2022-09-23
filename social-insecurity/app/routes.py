@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request
-from app import app, query_db
-from app.forms import IndexForm, LoginForm, PostForm, FriendsForm, ProfileForm, CommentsForm, RegistrationForm 
+from app import app, query_db, valid_login, add_user
+from app.forms import IndexForm, PostForm, FriendsForm, ProfileForm, CommentsForm
 from datetime import datetime
+from werkzeug.security import generate_password_hash
 import os
 from flask_wtf.csrf import CSRFProtect
 
@@ -11,47 +12,46 @@ csrf = CSRFProtect(app)
 # home page/login/registration
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
-#def index():
-#   form = IndexForm()
+def index():
+    form = IndexForm()
 
-
-#    if form.login.is_submitted() and form.login.submit.data:
-#        user = query_db('SELECT * FROM Users WHERE username="{}";'.format(form.login.username.data), one=True)
-#        if user == None:
-#            flash('Sorry, this user does not exist!')
-#        elif user['password'] == form.login.password.data:
-#            return redirect(url_for('stream', username=form.login.username.data))
-#        else:
-#            flash('Sorry, wrong password!')
-
-#    elif form.register.is_submitted() and form.register.submit.data:
-#        query_db('INSERT INTO Users (username, first_name, last_name, password) VALUES("{}", "{}", "{}", "{}");'.format(form.register.username.data, form.register.first_name.data,
-#         form.register.last_name.data, form.register.password.data))
-#        return redirect(url_for('index'))
-#    return render_template('index.html', title='Welcome', form=form) """
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm(request.form)
-    if request.method == 'POST' and form.validate():
-        user = query_db('SELECT * FROM Users WHERE username="{}";'.format(form.login.username.data), one=True)
+    if form.login.is_submitted() and form.login.submit.data:
+        user = valid_login(form.login.username.data,form.login.password.data)
+        
         if user == None:
             flash('Sorry, this user does not exist!')
         elif user['password'] == form.login.password.data:
             return redirect(url_for('stream', username=form.login.username.data))
-    return render_template('index.html', title='Welcome', form=form)
-            
-    
+        else:
+            flash('Sorry, wrong password!')
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm(request.form)
-    if request.method == 'POST' and form.validate():
-        query_db('INSERT INTO Users (username, first_name, last_name, password) VALUES("{}", "{}", "{}", "{}");'.format(form.register.username.data, form.register.first_name.data,
-         form.register.last_name.data, form.register.password.data))
-        flash('Thanks for registering')
-        return redirect(url_for('login'))
+    elif form.register.is_submitted() and form.register.submit.data:
+        add_user(form.register.username.data, form.register.first_name.data, form.register.last_name.data, form.register.password.data, generate_password_hash(form.register.username.data))
+        return redirect(url_for('index'))
     return render_template('index.html', title='Welcome', form=form)
+
+#@app.route('/login', methods=['GET', 'POST'])
+#def login():
+#    form = LoginForm(request.form)
+#    if request.method == 'POST' and form.validate():
+#        user = valid_login(form.login.username.data, form.login.password.data)
+#        if user == None:
+#            flash('Sorry, this user does not exist!')
+#        elif user['password'] == form.login.password.data:
+#            return redirect(url_for('stream', username=form.login.username.data))
+#    return render_template('index.html', title='Welcome', form=form)
+#            
+#    
+
+#@app.route('/register', methods=['GET', 'POST'])
+#def register():
+#    form = RegistrationForm(request.form)
+#    if request.method == 'POST' and form.validate():
+#        query_db('INSERT INTO Users (username, first_name, last_name, password) VALUES("{}", "{}", "{}", "{}");'.format(form.register.username.data, form.register.first_name.data,
+#         form.register.last_name.data, form.register.password.data))
+#        flash('Thanks for registering')
+#        return redirect(url_for('login'))
+#    return render_template('index.html', title='Welcome', form=form)
 
 # content stream page
 @app.route('/stream/<username>', methods=['GET', 'POST'])

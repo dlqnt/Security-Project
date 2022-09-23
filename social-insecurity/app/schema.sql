@@ -14,16 +14,17 @@ DROP TABLE IF EXISTS [Users];
 
 CREATE TABLE [Users] (
   id INTEGER PRIMARY KEY,
-  username VARCHAR,
-  first_name VARCHAR,
-  last_name VARCHAR,
-  [password] VARCHAR,
-  education VARCHAR DEFAULT 'Unknown',
-  employment VARCHAR DEFAULT 'Unknown',
-  music VARCHAR DEFAULT 'Unknown',
-  movie VARCHAR DEFAULT 'Unknown',
-  nationality VARCHAR DEFAULT 'Unknown',
-  birthday DATE DEFAULT 'Unknown'
+  username VARCHAR(20),
+  first_name TEXT,
+  last_name TEXT,
+  [password] TEXT,
+  education TEXT 'Unknown',
+  employment TEXT 'Unknown',
+  music TEXT 'Unknown',
+  movie TEXT 'Unknown',
+  nationality TEXT 'Unknown',
+  birthday DATE DEFAULT 'Unknown',
+  passwordhash VARCHAR(120),
 );
 
 -- ---
@@ -37,7 +38,7 @@ CREATE TABLE [Posts](
   id INTEGER PRIMARY KEY,
   u_id INTEGER,
   content INTEGER,
-  [image] VARCHAR,
+  [image] IMAGE,
   [creation_time] DATETIME,
   FOREIGN KEY (u_id) REFERENCES [Users](id)
 );
