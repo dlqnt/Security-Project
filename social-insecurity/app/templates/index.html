@@ -14,7 +14,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Access an existing profile</h5>
-                    <form action="" method="POST">
+                    <form action="/login" method="POST">
                         {{ wtf.form_field(form.login.username) }} {{ wtf.form_field(form.login.password) }} {{ wtf.form_field(form.login.remember_me) }} {{ wtf.form_field(form.login.submit, class="btn btn-primary") }}
                     </form>
                 </div>
