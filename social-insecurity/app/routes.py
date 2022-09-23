@@ -15,7 +15,7 @@ csrf = CSRFProtect(app)
 def index():
     form = IndexForm()
 
-    if form.login.validate_on_submit() and form.login.submit.data:
+    if form.login.is_submitted() and form.login.submit.data:
         login = valid_login(form.login.username.data, form.login.password.data)
 
         if not login:
@@ -29,7 +29,7 @@ def index():
         else:
             flash('Sorry, wrong password!')
 
-    elif form.register.validate_on_submit() and form.register.submit.data:
+    elif form.register.is_submitted() and form.register.submit.data:
         add_user(form.register.username.data, form.register.first_name.data, form.register.last_name.data, generate_password_hash(form.register.password.data))
         return redirect(url_for('index'))
     return render_template('index.html', title='Welcome', form=form)
@@ -80,7 +80,9 @@ def stream(username):
 @app.route("/logout")
 def logout():
     session.pop("id")
-    return render_template("index.html")
+    form = IndexForm()
+    return redirect(url_for('index'))
+    
 
 # comment page for a given post and user.
 @app.route('/comments/<username>/<int:p_id>', methods=['GET', 'POST'])
