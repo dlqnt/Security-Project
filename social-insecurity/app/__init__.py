@@ -52,9 +52,9 @@ def get_user_by_username(username):
         sql = ("SELECT id, username FROM users WHERE username = ?")
         cur.execute(sql, (username,))
         for row in cur:
-            (id,name) = row
+            (id,username) = row
             return {
-                "username": name,
+                "username": username,
                 "userid": id
             }
         else:
