@@ -2,19 +2,19 @@ from flask import Flask, g
 from config import Config
 from flask_bootstrap import Bootstrap
 from werkzeug.security import check_password_hash 
+from flask_wtf.csrf import CSRFProtect
 #from flask_login import LoginManager
 import sqlite3
 import os
-from flask_wtf.csrf import CSRFProtect
-
 
 
 # create and configure app
 app = Flask(__name__)
 Bootstrap(app)
 app.config.from_object(Config)
+app.secret_key = app.config["SECRET_KEY"]
 csrf = CSRFProtect(app)
-
+csrf.init_app(app)
 # TODO: Handle login management better, maybe with flask_login?
 #login = LoginManager(app)
 
@@ -43,12 +43,12 @@ def query_db(query, one=False):
     db.commit()
     return (rv[0] if rv else None) if one else rv
 
-def add_user(username, first_name, last_name, password, hash):
+def add_user(username, first_name, last_name, password):
     conn = get_db()
     cur = conn.cursor()
     try:
-        sql = ('INSERT INTO Users (username, first_name, last_name, password, passwordhash) VALUES(?, ?, ?, ?)')
-        cur.execute(sql, (username, first_name, last_name, password, hash))
+        sql = ('INSERT INTO Users (username, first_name, last_name, password) VALUES(?, ?, ?, ?)')
+        cur.execute(sql, (username, first_name, last_name, password))
         conn.commit()
     except sqlite3.Error as err:
         print("Error: {}".format(err))
@@ -85,13 +85,13 @@ def get_user_by_username(username):
     
 
 
-def get_hash_for_login(username):
+def get_hash_for_login(conn, username):
     """Get user details from id."""
     db = sqlite3.connect(app.config['DATABASE'])
     conn = db
     cur = conn.cursor()
     try:
-        sql = ("SELECT passwordhash FROM Users WHERE username=?")
+        sql = ("SELECT password FROM Users WHERE username=?")
         cur.execute(sql, (username,))
         for row in cur:
             (passhash,) = row
@@ -115,7 +115,7 @@ def valid_login(username, password):
     # the generate a password hash use the line below:
     # generate_password_hash("rawPassword")
     db.close()
-
+    
     if hash != None:
         return check_password_hash(hash, password)
     return None

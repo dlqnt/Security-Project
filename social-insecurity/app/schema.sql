@@ -17,14 +17,14 @@ CREATE TABLE [Users] (
   username VARCHAR(20),
   first_name TEXT,
   last_name TEXT,
-  [password] TEXT,
+  passwordhash VARCHAR(120),
   education TEXT 'Unknown',
   employment TEXT 'Unknown',
   music TEXT 'Unknown',
   movie TEXT 'Unknown',
   nationality TEXT 'Unknown',
   birthday DATE DEFAULT 'Unknown',
-  passwordhash VARCHAR(120),
+  
 );
 
 -- ---

@@ -16,17 +16,17 @@ def index():
     form = IndexForm()
 
     if form.login.is_submitted() and form.login.submit.data:
-        user = valid_login(form.login.username.data,form.login.password.data)
+        user = valid_login(form.login.username.data, form.login.password.data)
         
         if user == None:
             flash('Sorry, this user does not exist!')
-        elif user['password'] == form.login.password.data:
+        elif user:
             return redirect(url_for('stream', username=form.login.username.data))
         else:
             flash('Sorry, wrong password!')
 
     elif form.register.is_submitted() and form.register.submit.data:
-        add_user(form.register.username.data, form.register.first_name.data, form.register.last_name.data, form.register.password.data, generate_password_hash(form.register.username.data))
+        add_user(form.register.username.data, form.register.first_name.data, form.register.last_name.data, generate_password_hash(form.register.password.data))
         return redirect(url_for('index'))
     return render_template('index.html', title='Welcome', form=form)
 
