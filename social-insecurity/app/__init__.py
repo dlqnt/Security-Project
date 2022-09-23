@@ -43,6 +43,21 @@ def query_db(query, one=False):
     db.commit()
     return (rv[0] if rv else None) if one else rv
 
+def add_user(username, hash):
+    conn = get_db()
+    cur = conn.cursor()
+    try:
+        sql = ('INSERT INTO Users (username, first_name, last_name, password) VALUES(?, ?, ?, ?)')
+        cur.execute(sql, (username, hash))
+        conn.commit()
+    except sqlite3.Error as err:
+        print("Error: {}".format(err))
+        return -1
+    else:
+        print("User {} created with id {}.".format(username, cur.lastrowid))
+        return cur.lastrowid
+    finally:
+        cur.close()
 
 def get_user_by_username(username):
     """Get user details by name."""
