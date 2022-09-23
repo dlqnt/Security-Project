@@ -15,7 +15,7 @@ csrf = CSRFProtect(app)
 def index():
     form = IndexForm()
 
-    if form.login.is_submitted() and form.login.submit.data:
+    if form.login.validate_on_submit() and form.login.submit.data:
         login = valid_login(form.login.username.data, form.login.password.data)
 
         if not login:
@@ -29,7 +29,7 @@ def index():
         else:
             flash('Sorry, wrong password!')
 
-    elif form.register.is_submitted() and form.register.submit.data:
+    elif form.register.validate_on_submit() and form.register.submit.data:
         add_user(form.register.username.data, form.register.first_name.data, form.register.last_name.data, generate_password_hash(form.register.password.data))
         return redirect(url_for('index'))
     return render_template('index.html', title='Welcome', form=form)
@@ -91,7 +91,7 @@ def comments(username, p_id):
     if userid == None:
         abort(404)
     form = CommentsForm()
-    if form.is_submitted():
+    if form.validate_on_submit():
         user = query_db('SELECT * FROM Users WHERE username="{}";'.format(username), one=True)
         query_db('INSERT INTO Comments (p_id, u_id, comment, creation_time) VALUES({}, {}, "{}", \'{}\');'.format(p_id, user['id'], form.comment.data, datetime.now()))
 
@@ -107,7 +107,7 @@ def friends(username):
         abort(404)
     form = FriendsForm()
     user = query_db('SELECT * FROM Users WHERE username="{}";'.format(username), one=True)
-    if form.is_submitted():
+    if form.validate_on_submit():
         friend = query_db('SELECT * FROM Users WHERE username="{}";'.format(form.username.data), one=True)
         if friend is None:
             flash('User does not exist')
@@ -124,7 +124,7 @@ def profile(username):
     if userid == None:
         abort(404)
     form = ProfileForm()
-    if form.is_submitted():
+    if form.validate_on_submit():
         query_db('UPDATE Users SET education="{}", employment="{}", music="{}", movie="{}", nationality="{}", birthday=\'{}\' WHERE username="{}" ;'.format(
             form.education.data, form.employment.data, form.music.data, form.movie.data, form.nationality.data, form.birthday.data, username
         ))

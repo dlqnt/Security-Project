@@ -36,18 +36,18 @@ class PostForm(FlaskForm):
     submit = SubmitField('Post')
 
 class CommentsForm(FlaskForm):
-    comment = TextAreaField('New Comment', render_kw={'placeholder': 'What do you have to say?'})
+    comment = TextAreaField('New Comment', [validators.Length(min=6, max=200)], render_kw={'placeholder': 'What do you have to say?'})
     submit = SubmitField('Comment')
 
 class FriendsForm(FlaskForm):
-    username = StringField('Friend\'s username', render_kw={'placeholder': 'Username'})
+    username = StringField('Friend\'s username',[validators.Length(min=6, max=35)], render_kw={'placeholder': 'Username'})
     submit = SubmitField('Add Friend')
 
 class ProfileForm(FlaskForm):
-    education = StringField('Education', render_kw={'placeholder': 'Highest education'})
-    employment = StringField('Employment', render_kw={'placeholder': 'Current employment'})
-    music = StringField('Favorite song', render_kw={'placeholder': 'Favorite song'})
-    movie = StringField('Favorite movie', render_kw={'placeholder': 'Favorite movie'})
-    nationality = StringField('Nationality', render_kw={'placeholder': 'Your nationality'})
+    education = StringField('Education', [validators.Length(min=6, max=35)],render_kw={'placeholder': 'Highest education'})
+    employment = StringField('Employment',[validators.Length(min=6, max=35)], render_kw={'placeholder': 'Current employment'})
+    music = StringField('Favorite song',[validators.Length(min=6, max=35)], render_kw={'placeholder': 'Favorite song'})
+    movie = StringField('Favorite movie',[validators.Length(min=6, max=35)], render_kw={'placeholder': 'Favorite movie'})
+    nationality = StringField('Nationality',[validators.Length(min=6, max=35)], render_kw={'placeholder': 'Your nationality'})
     birthday = DateField('Birthday')
     submit = SubmitField('Update Profile')

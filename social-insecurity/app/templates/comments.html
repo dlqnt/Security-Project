@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
-{% block content %}
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block content %}
 <div class="container-flex justify-content-center">
     <div class="row justify-content-center">
         <div class="col-sm-12 col-lg-6">
@@ -15,19 +13,17 @@
                 <div class="card-body">
                     <p class="card-text">{{post.content}}</p>
                     {% if post.image %}
-                    <img src="{{'/static/uploads/' + post.image}}" class="card-img-bottom">
-                    {% endif %}
+                    <img src="{{'/static/uploads/' + post.image}}" class="card-img-bottom"> {% endif %}
                     <h4 class="card-text">Comments</h4>
                     <form action="" method="POST" novalidate>
-                        {{ wtf.form_field(form.comment) }}
-                        {{ wtf.form_field(form.submit, class="btn btn-primary") }}
+                        {{ wtf.form_field(form.comment) }} {{ wtf.form_field(form.submit, class="btn btn-primary") }}
                     </form>
                     <br>
                     <ul class="list-group list-group-flush">
                         {% for comment in comments %}
                         <li class="list-group-item">
                             <div class="row align-items-center">
-                                <a class="col-4" href={{url_for('profile', username=comment.username)}}><span class="fa fa-user" style="font-size: 25px"></span>&nbsp;{{comment.username}}</a>
+                                <a class="col-4" href={{url_for( 'profile', username=comment.username)}}><span class="fa fa-user" style="font-size: 25px"></span>&nbsp;{{comment.username}}</a>
                                 <span class="col-8 text-right">{{post.creation_time}}</span>
                             </div>
                             <p>{{comment.comment}}</p>

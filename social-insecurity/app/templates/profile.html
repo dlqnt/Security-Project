@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
-{% block content %}
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block content %}
 <div class="container-flex justify-content-center">
     <div class="row justify-content-center">
         <div class="col-sm-12 col-lg-6">
@@ -58,13 +56,8 @@
                     <!--Edit details-->
                     <div id="edit-details" style="display: none;">
                         <form action="" method="POST" novalidate>
-                            {{ wtf.form_field(form.education) }}
-                            {{ wtf.form_field(form.employment) }}
-                            {{ wtf.form_field(form.music) }}
-                            {{ wtf.form_field(form.movie) }}
-                            {{ wtf.form_field(form.nationality) }}
-                            {{ wtf.form_field(form.birthday) }}
-                            {{ wtf.form_field(form.submit, class="btn btn-primary") }}
+                            {{ form.csrf_token }} {{ wtf.form_field(form.education) }} {{ wtf.form_field(form.employment) }} {{ wtf.form_field(form.music) }} {{ wtf.form_field(form.movie) }} {{ wtf.form_field(form.nationality) }} {{ wtf.form_field(form.birthday) }} {{ wtf.form_field(form.submit,
+                            class="btn btn-primary") }}
                         </form>
                     </div>
                 </div>
@@ -72,13 +65,11 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block script %}
+{% endblock %} {% block script %}
 <script>
-$('#edit-button').click(function() {
-    $('#view-details').toggle();
-    $('#edit-details').toggle();
-});
+    $('#edit-button').click(function() {
+        $('#view-details').toggle();
+        $('#edit-details').toggle();
+    });
 </script>
 {% endblock %}
