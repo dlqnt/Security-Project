@@ -32,7 +32,7 @@ class RegistrationForm(FlaskForm):
         validators.EqualTo('confirm_password', message='Passwords must match')
     ])
     confirm_password = PasswordField('Repeat Password')
-    recaptcha2 = RecaptchaField()
+    
     submit = SubmitField('submit')
 
 
