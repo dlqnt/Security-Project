@@ -120,7 +120,7 @@ def get_post(id):
     conn = get_db()
     cur = conn.cursor() 
     try:
-        sql = ('SELECT * FROM Posts WHERE id= ? ;')
+        sql = ('SELECT * FROM Posts WHERE id= ? ')
         cur.execute(sql, id)
         for row in cur:
             return row
@@ -139,7 +139,7 @@ def insert_friend(u_id, f_id):
     conn = get_db()
     cur = conn.cursor() 
     try:
-        sql = ('INSERT INTO Friends (u_id, f_id) VALUES(?, ?);')
+        sql = ('INSERT INTO Friends (u_id, f_id) VALUES(?, ?)')
         cur.execute(sql, (u_id,f_id) )
         conn.commit()
     except sqlite3.Error as err:
@@ -170,7 +170,7 @@ def update_userinfo(education, employment, music, movie, nationality, birthday, 
     conn = get_db()
     cur = conn.cursor()
     try:
-        sql = ('UPDATE Users SET education= ?, employment= ?, music= ?, movie= ?, nationality=?, birthday= ?  WHERE username= ? ;')
+        sql = ('UPDATE Users SET education= ?, employment= ?, music= ?, movie= ?, nationality=?, birthday= ?  WHERE username= ? ')
         cur.execute(sql, (education, employment, music, movie, nationality, birthday, username))
         for row in cur:
             (education, employment, music, movie, nationality, birthday, username) = row
