@@ -71,7 +71,7 @@ def get_user_by_username(username):
     conn = get_db()
     cur = conn.cursor()
     try:
-        sql = ("SELECT id, username FROM users WHERE username = ?")
+        sql = ("SELECT id, username FROM Users WHERE username = ?")
         cur.execute(sql, (username,))
         for row in cur:
             (id,username) = row
@@ -145,6 +145,57 @@ def insert_friend(u_id, f_id):
     except sqlite3.Error as err:
         print("Error: {}".format(err))
         return -1
+    finally:
+        cur.close()
+
+def get_detailsUser(username):
+    conn = get_db()
+    cur = conn.cursor()
+    try:
+        sql = ("SELECT * FROM Users WHERE username = ?")
+        cur.execute(sql, (username),)
+        for row in cur:
+            return row
+        else:
+            #user does not exist
+            return None
+    except sqlite3.Error as err:
+        print("Error: {}".format(err))
+    finally:
+        cur.close()
+    
+
+
+def update_userinfo(education, employment, music, movie, nationality, birthday, username):
+    conn = get_db()
+    cur = conn.cursor()
+    try:
+        sql = ('UPDATE Users SET education= ?, employment= ?, music= ?, movie= ?, nationality=?, birthday= ?  WHERE username= ? ;')
+        cur.execute(sql, (education, employment, music, movie, nationality, birthday, username))
+        for row in cur:
+            (education, employment, music, movie, nationality, birthday, username) = row
+            return {
+                "education": education,
+                "employment": employment,
+                "music": music,
+                "movie": movie,
+                "nationality": nationality,
+                "birthday": birthday,
+                "username": username
+            }
+        else:
+            #user does not exist
+            return {
+                "education": None,
+                "employment": None,
+                "music": None,
+                "movie": None,
+                "nationality": None,
+                "birthday": None,
+                "username": username
+            }
+    except sqlite3.Error as err:
+        print("Error: {}".format(err))
     finally:
         cur.close()
 
