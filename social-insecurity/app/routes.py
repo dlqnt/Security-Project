@@ -34,30 +34,6 @@ def index():
         return redirect(url_for('index'))
     return render_template('index.html', title='Welcome', form=form)
 
-#@app.route('/login', methods=['GET', 'POST'])
-#def login():
-#    form = LoginForm(request.form)
-#    if request.method == 'POST' and form.validate():
-#        user = valid_login(form.login.username.data, form.login.password.data)
-#        if user == None:
-#            flash('Sorry, this user does not exist!')
-#        elif user['password'] == form.login.password.data:
-#            return redirect(url_for('stream', username=form.login.username.data))
-#    return render_template('index.html', title='Welcome', form=form)
-#            
-#    
-
-#@app.route('/register', methods=['GET', 'POST'])
-#def register():
-#    form = RegistrationForm(request.form)
-#    if request.method == 'POST' and form.validate():
-#        query_db('INSERT INTO Users (username, first_name, last_name, password) VALUES("{}", "{}", "{}", "{}");'.format(form.register.username.data, form.register.first_name.data,
-#         form.register.last_name.data, form.register.password.data))
-#        flash('Thanks for registering')
-#        return redirect(url_for('login'))
-#    return render_template('index.html', title='Welcome', form=form)
-
-# content stream page
 @app.route('/stream/<username>', methods=['GET', 'POST'])
 def stream(username):
     userid = session.get("id", None)
