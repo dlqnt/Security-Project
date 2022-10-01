@@ -91,7 +91,20 @@ def get_user_by_username(username):
     finally:
         cur.close()
     
-
+def insert_comment(p_id, u_id, comment, creation_time):
+    conn = get_db()
+    cur = conn.cursor() 
+    try:
+        sql = ('INSERT INTO Comments (p_id, u_id, comment, creation_time) VALUES(?, ?, ?, ?)')
+        cur.execute(sql, (p_id, u_id, comment, creation_time) )
+        conn.commit()
+    except sqlite3.Error as err:
+        print("Error: {}".format(err))
+        return -1
+    else:
+        return cur.lastrowid
+    finally:
+        cur.close()
 
 def get_hash_for_login(conn, username):
     """Get user details from id."""
@@ -128,6 +141,8 @@ def valid_login(username, password):
         return check_password_hash(hash, password)
     return None
 # TODO: Add more specific queries to simplify code
+
+
 
 
 # automatically called when application is closed, and closes db connection

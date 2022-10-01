@@ -67,7 +67,7 @@ def stream(username):
     if userid == None:
         abort(404)
     form = PostForm()
-    user = query_db('SELECT * FROM Users WHERE username="{}";'.format(username), one=True)
+    user = get_user_by_username(form.login.username.data)
     if form.validate_on_submit():
         if form.image.data:
             path = os.path.join(app.config['UPLOAD_PATH'], form.image.data.filename)
@@ -95,7 +95,7 @@ def comments(username, p_id):
         abort(404)
     form = CommentsForm()
     if form.validate_on_submit():
-        user = query_db('SELECT * FROM Users WHERE username="{}";'.format(username), one=True)
+        user = get_user_by_username(form.login.username.data)
         query_db('INSERT INTO Comments (p_id, u_id, comment, creation_time) VALUES({}, {}, "{}", \'{}\');'.format(p_id, user['id'], form.comment.data, datetime.now()))
 
     post = query_db('SELECT * FROM Posts WHERE id={};'.format(p_id), one=True)
@@ -109,7 +109,7 @@ def friends(username):
     if userid == None:
         abort(404)
     form = FriendsForm()
-    user = query_db('SELECT * FROM Users WHERE username="{}";'.format(username), one=True)
+    user = get_user_by_username(form.login.username.data)
     if form.validate_on_submit():
         friend = query_db('SELECT * FROM Users WHERE username="{}";'.format(form.username.data), one=True)
         if friend is None:
@@ -133,6 +133,6 @@ def profile(username):
         ))
         return redirect(url_for('profile', username=username))
     
-    user = query_db('SELECT * FROM Users WHERE username="{}";'.format(username), one=True)
+    user = get_user_by_username(form.login.username.data)
     return render_template('profile.html', title='profile', username=username, user=user, form=form)
 
