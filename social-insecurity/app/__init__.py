@@ -170,30 +170,9 @@ def update_userinfo(education, employment, music, movie, nationality, birthday, 
     conn = get_db()
     cur = conn.cursor()
     try:
-        sql = ('UPDATE Users SET education= ?, employment= ?, music= ?, movie= ?, nationality=?, birthday= ?  WHERE username= ? ')
-        cur.execute(sql, (education, employment, music, movie, nationality, birthday, username))
-        for row in cur:
-            (education, employment, music, movie, nationality, birthday, username) = row
-            return {
-                "education": education,
-                "employment": employment,
-                "music": music,
-                "movie": movie,
-                "nationality": nationality,
-                "birthday": birthday,
-                "username": username
-            }
-        else:
-            #user does not exist
-            return {
-                "education": None,
-                "employment": None,
-                "music": None,
-                "movie": None,
-                "nationality": None,
-                "birthday": None,
-                "username": username
-            }
+        sql = ('UPDATE Users SET education= ?, employment= ?, music= ?, movie= ?, nationality= ?, birthday= ?  WHERE username= ?' )
+        cur.execute(sql, ( education, employment, music, movie, nationality, birthday, username))
+        conn.commit()
     except sqlite3.Error as err:
         print("Error: {}".format(err))
     finally:
