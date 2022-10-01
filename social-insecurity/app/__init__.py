@@ -101,10 +101,22 @@ def insert_comment(p_id, u_id, comment, creation_time):
     except sqlite3.Error as err:
         print("Error: {}".format(err))
         return -1
-    else:
-        return cur.lastrowid
     finally:
         cur.close()
+
+def insert_image(u_id, content, image, creation_time):
+    conn = get_db()
+    cur = conn.cursor() 
+    try:
+        sql = ('INSERT INTO Posts (u_id, content, image, creation_time) VALUES(?, ?, ?, ?)')
+        cur.execute(sql, (u_id, content, image, creation_time) )
+        conn.commit()
+    except sqlite3.Error as err:
+        print("Error: {}".format(err))
+        return -1
+    finally:
+        cur.close()
+
 
 def get_hash_for_login(conn, username):
     """Get user details from id."""
