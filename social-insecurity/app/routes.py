@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request, session, abort
-from app import app, query_db, valid_login, add_user, get_user_by_username
+from app import app, query_db, valid_login, add_user, get_user_by_username, insert_comment
 from app.forms import IndexForm, PostForm, FriendsForm, ProfileForm, CommentsForm
 from datetime import datetime
 from werkzeug.security import generate_password_hash
@@ -67,7 +67,7 @@ def stream(username):
     if userid == None:
         abort(404)
     form = PostForm()
-    user = get_user_by_username(form.login.username.data)
+    user = get_user_by_username(username)
     if form.validate_on_submit():
         if form.image.data:
             path = os.path.join(app.config['UPLOAD_PATH'], form.image.data.filename)
@@ -95,9 +95,8 @@ def comments(username, p_id):
         abort(404)
     form = CommentsForm()
     if form.validate_on_submit():
-        user = get_user_by_username(form.login.username.data)
-        query_db('INSERT INTO Comments (p_id, u_id, comment, creation_time) VALUES({}, {}, "{}", \'{}\');'.format(p_id, user['id'], form.comment.data, datetime.now()))
-
+        user = get_user_by_username(username)
+        insert_comment(user["p_id"], user["u_id"], form.comment.data, datetime.now())
     post = query_db('SELECT * FROM Posts WHERE id={};'.format(p_id), one=True)
     all_comments = query_db('SELECT DISTINCT * FROM Comments AS c JOIN Users AS u ON c.u_id=u.id WHERE c.p_id={} ORDER BY c.creation_time DESC;'.format(p_id))
     return render_template('comments.html', title='Comments', username=username, form=form, post=post, comments=all_comments)
@@ -133,6 +132,6 @@ def profile(username):
         ))
         return redirect(url_for('profile', username=username))
     
-    user = get_user_by_username(form.login.username.data)
+    user = get_user_by_username(username)
     return render_template('profile.html', title='profile', username=username, user=user, form=form)
 
