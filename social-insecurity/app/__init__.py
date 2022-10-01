@@ -117,6 +117,24 @@ def insert_image(u_id, content, image, creation_time):
     finally:
         cur.close()
 
+def get_post(id):
+    conn = get_db()
+    cur = conn.cursor() 
+    try:
+        sql = ('SELECT * FROM Posts WHERE id= ? ;')
+        cur.execute(sql, id)
+        for row in cur:
+            return row
+        else:
+            #user does not exist
+            return {
+                "image": None,
+                "id": None
+            }
+    except sqlite3.Error as err:
+        print("Error: {}".format(err))
+    finally:
+        cur.close()
 
 def get_hash_for_login(conn, username):
     """Get user details from id."""
