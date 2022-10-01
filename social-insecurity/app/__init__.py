@@ -10,8 +10,7 @@ SECRET_KEY = "secret"
 
 # keys for localhost. Change as appropriate.
 
-RECAPTCHA_PUBLIC_KEY = "6Lc940YiAAAAALRmuJwl1CEr52J57axAiKRCIP_V"
-RECAPTCHA_PRIVATE_KEY = "6Lc940YiAAAAAJT4lKuyqhGM2sF90EIk3-9jwp0C"
+
 
 
 # create and configure app

@@ -4,12 +4,7 @@ from wtforms.fields.html5 import DateField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_wtf.recaptcha import RecaptchaField
 
-SECRET_KEY = "secret"
 
-# keys for localhost. Change as appropriate.
-
-RECAPTCHA_PUBLIC_KEY = "6Ld23EYiAAAAADRk2HZBOMMVIc4kuQcjuqHdwzu5"
-RECAPTCHA_PRIVATE_KEY = "6Ld23EYiAAAAAAWt_7rYYKPRQQ7WT3PocIR3dqbT"
 
 # defines all forms in the application, these will be instantiated by the template,
 # and the routes.py will read the values of the fields
