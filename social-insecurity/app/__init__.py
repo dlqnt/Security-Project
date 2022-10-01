@@ -135,6 +135,19 @@ def get_post(id):
     finally:
         cur.close()
 
+def insert_friend(u_id, f_id):
+    conn = get_db()
+    cur = conn.cursor() 
+    try:
+        sql = ('INSERT INTO Friends (u_id, f_id) VALUES(?, ?);')
+        cur.execute(sql, (u_id,f_id) )
+        conn.commit()
+    except sqlite3.Error as err:
+        print("Error: {}".format(err))
+        return -1
+    finally:
+        cur.close()
+
 def get_hash_for_login(conn, username):
     """Get user details from id."""
     db = sqlite3.connect(app.config['DATABASE'])

@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request, session, abort
-from app import app, query_db, valid_login, add_user, get_user_by_username, insert_comment, insert_image, get_post
+from app import app, query_db, valid_login, add_user, get_user_by_username, insert_comment, insert_image, get_post, insert_friend
 from app.forms import IndexForm, PostForm, FriendsForm, ProfileForm, CommentsForm
 from datetime import datetime
 from werkzeug.security import generate_password_hash
@@ -94,7 +94,7 @@ def comments(username, p_id):
     if form.validate_on_submit():
         user = get_user_by_username(username)
         insert_comment(user["p_id"], user["u_id"], form.comment.data, datetime.now())
-    post = get_post(user[p_id])
+    post = get_post(p_id)
     all_comments = query_db('SELECT DISTINCT * FROM Comments AS c JOIN Users AS u ON c.u_id=u.id WHERE c.p_id={} ORDER BY c.creation_time DESC;'.format(p_id))
     return render_template('comments.html', title='Comments', username=username, form=form, post=post, comments=all_comments)
 
@@ -105,13 +105,13 @@ def friends(username):
     if userid == None:
         abort(404)
     form = FriendsForm()
-    user = get_user_by_username(form.login.username.data)
+    user = get_user_by_username(username)
     if form.validate_on_submit():
-        friend = query_db('SELECT * FROM Users WHERE username="{}";'.format(form.username.data), one=True)
+        friend = get_user_by_username(form.username.data)
         if friend is None:
             flash('User does not exist')
         else:
-            query_db('INSERT INTO Friends (u_id, f_id) VALUES({}, {});'.format(user['id'], friend['id']))
+            insert_friend(user['id'], friend['id'])
     
     all_friends = query_db('SELECT * FROM Friends AS f JOIN Users as u ON f.f_id=u.id WHERE f.u_id={} AND f.f_id!={} ;'.format(user['id'], user['id']))
     return render_template('friends.html', title='Friends', username=username, friends=all_friends, form=form)
