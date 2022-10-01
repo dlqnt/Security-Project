@@ -103,6 +103,6 @@ def profile(username):
         update_userinfo(form.education.data, form.employment.data, form.music.data, form.movie.data, form.nationality.data, form.birthday.data, username)
         return redirect(url_for('profile', username=username))
     
-    user = query_db('SELECT * FROM Users WHERE username="{}";'.format(username), one=True)
+    user =  get_detailsUser(username)
     return render_template('profile.html', title='profile', username=username, user=user, form=form)
 

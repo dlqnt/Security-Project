@@ -148,17 +148,25 @@ def insert_friend(u_id, f_id):
     finally:
         cur.close()
 
-def get_detailsUser(username):
+def get_detailsUser(usern):
     conn = get_db()
     cur = conn.cursor()
     try:
-        sql = ("SELECT * FROM Users WHERE username = ?")
-        cur.execute(sql, (username),)
+        sql = ("SELECT first_name, last_name, education, employment, music, movie, nationality, birthday, username FROM Users WHERE username = ?")
+        cur.execute(sql, (usern,))
         for row in cur:
-            return row
-        else:
-            #user does not exist
-            return None
+            (first_name, last_name, education, employment, music, movie, nationality, birthday, usern) = row
+            return{
+            "first_name": first_name,
+            "last_name": last_name,
+            "education": education,
+            "employment": employment,
+            "music": music,
+            "movie": movie,
+            "nationality": nationality,
+            "birthday": birthday,
+            "username": usern
+            }
     except sqlite3.Error as err:
         print("Error: {}".format(err))
     finally:
