@@ -6,6 +6,12 @@ from flask_wtf.csrf import CSRFProtect
 #from flask_login import LoginManager
 import sqlite3
 import os
+SECRET_KEY = "secret"
+
+# keys for localhost. Change as appropriate.
+
+RECAPTCHA_PUBLIC_KEY = "6Lc940YiAAAAALRmuJwl1CEr52J57axAiKRCIP_V"
+RECAPTCHA_PRIVATE_KEY = "6Lc940YiAAAAAJT4lKuyqhGM2sF90EIk3-9jwp0C"
 
 
 # create and configure app
@@ -15,6 +21,8 @@ app.config.from_object(Config)
 app.secret_key = app.config["SECRET_KEY"]
 csrf = CSRFProtect(app)
 csrf.init_app(app)
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6Ldh6kYiAAAAAEPBB9QMnKYpnqtzZOYk-hlikNW1'
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6Ldh6kYiAAAAAArnDT4M2uMUObrBndRd0MOM6OLa'
 # TODO: Handle login management better, maybe with flask_login?
 #login = LoginManager(app)
 

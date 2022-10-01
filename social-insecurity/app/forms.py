@@ -1,7 +1,15 @@
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, FormField, TextAreaField, FileField, validators
 from wtforms.fields.html5 import DateField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
+from flask_wtf.recaptcha import RecaptchaField
+
+SECRET_KEY = "secret"
+
+# keys for localhost. Change as appropriate.
+
+RECAPTCHA_PUBLIC_KEY = "6Ld23EYiAAAAADRk2HZBOMMVIc4kuQcjuqHdwzu5"
+RECAPTCHA_PRIVATE_KEY = "6Ld23EYiAAAAAAWt_7rYYKPRQQ7WT3PocIR3dqbT"
 
 # defines all forms in the application, these will be instantiated by the template,
 # and the routes.py will read the values of the fields
@@ -11,6 +19,7 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 class LoginForm(FlaskForm):
     username = StringField('Username', render_kw={'placeholder': 'Username'})
     password = PasswordField('Password', render_kw={'placeholder': 'Password'})
+    recaptcha = RecaptchaField()
     remember_me = BooleanField('Remember me') # TODO: It would be nice to have this feature implemented, probably by using cookies
     submit = SubmitField('Sign In')
 
@@ -23,6 +32,7 @@ class RegistrationForm(FlaskForm):
         validators.EqualTo('confirm_password', message='Passwords must match')
     ])
     confirm_password = PasswordField('Repeat Password')
+    recaptcha = RecaptchaField()
     submit = SubmitField('submit')
 
 

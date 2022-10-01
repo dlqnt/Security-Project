@@ -5,7 +5,10 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash
 import os
 from flask_wtf.csrf import CSRFProtect
-
+DEBUG = True
+SECRET_KEY = "secret"
+RECAPTCHA_PUBLIC_KEY = "6Ld23EYiAAAAADRk2HZBOMMVIc4kuQcjuqHdwzu5"
+RECAPTCHA_PRIVATE_KEY = "6Ld23EYiAAAAAAWt_7rYYKPRQQ7WT3PocIR3dqbT"
 csrf = CSRFProtect(app)
 # this file contains all the different routes, and the logic for communicating with the database
 
