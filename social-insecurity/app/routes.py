@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request, session, abort
-from app import app, query_db, valid_login, add_user, get_user_by_username, insert_comment, insert_image, get_post, insert_friend, update_userinfo, get_detailsUser
+from app import app, query_db, valid_login, add_user, get_user_by_username, insert_comment, insert_image, get_post, insert_friend, update_userinfo, get_detailsUser, get_friend
 from app.forms import IndexForm, PostForm, FriendsForm, ProfileForm, CommentsForm
 from datetime import datetime
 from werkzeug.security import generate_password_hash
