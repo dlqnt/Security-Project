@@ -37,7 +37,8 @@ def index():
 @app.route('/stream/<username>', methods=['GET', 'POST'])
 def stream(username):
     userid = session.get("id", None)
-    if userid == None:
+    user = get_user_by_username(username)
+    if userid == None or userid != user["id"]:
         abort(404)
     form = PostForm()
     user = get_user_by_username(username)
@@ -64,7 +65,8 @@ def logout():
 @app.route('/comments/<username>/<int:p_id>', methods=['GET', 'POST'])
 def comments(username, p_id):
     userid = session.get("id", None)
-    if userid == None:
+    user = get_user_by_username(username)
+    if userid == None or userid != user["id"]:
         abort(404)
     form = CommentsForm()
     if form.validate_on_submit():
@@ -78,7 +80,8 @@ def comments(username, p_id):
 @app.route('/friends/<username>', methods=['GET', 'POST'])
 def friends(username):
     userid = session.get("id", None)
-    if userid == None:
+    user = get_user_by_username(username)
+    if userid == None or userid != user["id"]:
         abort(404)
     form = FriendsForm()
     user = get_user_by_username(username)
@@ -96,8 +99,10 @@ def friends(username):
 @app.route('/profile/<username>', methods=['GET', 'POST'])
 def profile(username):
     userid = session.get("id", None)
-    if userid == None:
+    user = get_user_by_username(username)
+    if userid == None or  userid != user["id"]:
         abort(404)
+    
     form = ProfileForm()
     if form.validate_on_submit():
         update_userinfo(form.education.data, form.employment.data, form.music.data, form.movie.data, form.nationality.data, form.birthday.data, username)
@@ -106,3 +111,13 @@ def profile(username):
     user =  get_detailsUser(username)
     return render_template('profile.html', title='profile', username=username, user=user, form=form)
 
+@app.route('/friend/<username>', methods=['GET'])
+def friend(username):
+    userid = session.get("id", None)
+    user = get_user_by_username(username)
+    if userid == None or user["id"] == None:
+        abort(404)
+    form = ProfileForm()
+    
+    user =  get_detailsUser(username)
+    return render_template('profile.html', title='profile', username=username, user=user, form=form)
