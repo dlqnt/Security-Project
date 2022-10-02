@@ -6,6 +6,7 @@ from flask_wtf.csrf import CSRFProtect
 #from flask_login import LoginManager
 import sqlite3
 import os
+from flask_talisman import Talisman
 SECRET_KEY = "secret"
 
 # keys for localhost. Change as appropriate.
@@ -16,15 +17,35 @@ SECRET_KEY = "secret"
 # create and configure app
 app = Flask(__name__)
 Bootstrap(app)
+
 app.config.from_object(Config)
 app.secret_key = app.config["SECRET_KEY"]
 csrf = CSRFProtect(app)
 csrf.init_app(app)
 app.config['RECAPTCHA_PUBLIC_KEY'] = '6Ldh6kYiAAAAAEPBB9QMnKYpnqtzZOYk-hlikNW1'
 app.config['RECAPTCHA_PRIVATE_KEY'] = '6Ldh6kYiAAAAAArnDT4M2uMUObrBndRd0MOM6OLa'
+
 # TODO: Handle login management better, maybe with flask_login?
 #login = LoginManager(app)
-
+talisman = Talisman(
+    app,
+    content_security_policy={
+        'default-src':[ '\'self\'',
+        
+        'stackpath.bootstrapcdn.com',
+            '*.google.com',
+            'cdnjs.cloudflare.com',
+            'www.google.com/recaptcha',
+            'maxcdn.bootstrapcdn.com',
+            'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
+            'https://code.jquery.com',
+            'https://www.gstatic.com/recaptcha/'
+        ], 
+        
+    },
+    content_security_policy_nonce_in=['script-src'],
+   
+)
 # get an instance of the db
 def get_db():
     db = getattr(g, '_database', None)
