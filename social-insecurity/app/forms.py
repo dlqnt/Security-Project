@@ -12,15 +12,15 @@ from flask_wtf.recaptcha import RecaptchaField
 # TODO: There was some important security feature that wtforms provides, but I don't remember what; implement it
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', render_kw={'placeholder': 'Username'})
-    password = PasswordField('Password', render_kw={'placeholder': 'Password'})
+    username = StringField('Username', [validators.Length(min=2, max=20)], render_kw={'placeholder': 'Username'})
+    password = PasswordField('Password', [validators.Length(min=2, max=20)], render_kw={'placeholder': 'Password'})
     recaptcha = RecaptchaField()
     remember_me = BooleanField('Remember me') # TODO: It would be nice to have this feature implemented, probably by using cookies
     submit = SubmitField('Sign In')
 
 class RegistrationForm(FlaskForm):
-    first_name = StringField('First Name',[validators.Length(min=6, max=35)], render_kw={'placeholder': 'First Name'})
-    last_name = StringField('Last Name', [validators.Length(min=6, max=35)], render_kw={'placeholder': 'Last Name'})
+    first_name = StringField('First Name',[validators.Length(min=2, max=20)], render_kw={'placeholder': 'First Name'})
+    last_name = StringField('Last Name', [validators.Length(min=2, max=20)], render_kw={'placeholder': 'Last Name'})
     username = StringField('Username', [validators.Length(min=4, max=25)])
     password = PasswordField('New Password', [
         validators.DataRequired(),
