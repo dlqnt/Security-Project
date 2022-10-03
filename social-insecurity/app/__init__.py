@@ -155,30 +155,8 @@ def get_post(id):
         print("Error: {}".format(err))
     finally:
         cur.close()
-#not working as intended
-#def get_friend(u_id, f_id):
-#   conn = get_db()
-#   cur = conn.cursor() 
-#   try:
-#       sql = ('SELECT u_id, f_id FROM Friends WHERE u_id = ?, f_id = ?)')
-#        cur.execute(sql, (u_id,f_id) )
-#        for row in cur:
-#            (u_id,f_id) = row
-#            return{
-#                "userId": u_id,
-#                "friendId": f_id,
-#            }
-#        else:
-#            return{
-#                "userId": u_id,
-#                "friendId": None,
-#            }
 
-    except sqlite3.Error as err:
-        print("Error: {}".format(err))
-        return -1
-    finally:
-        cur.close()
+
 def insert_friend(u_id, f_id):
     conn = get_db()
     cur = conn.cursor() 
